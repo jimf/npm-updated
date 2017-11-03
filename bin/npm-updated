@@ -1,0 +1,64 @@
+#!/usr/bin/env node
+
+var color = require('cli-color')
+var parseOpts = require('minimist')
+var table = require('text-table')
+var pkg = require('../package.json')
+var app = require('../lib/app')
+
+var opts = parseOpts(process.argv.slice(2), {
+  alias: {
+    help: 'h'
+  },
+  default: {
+    packageJsonPath: './package.json',
+    nodeModulesDir: './node_modules/',
+    backupNodeModulesDir: './node_modules.bak'
+  }
+})
+
+function formatResults (results) {
+  // TODO: handle no changes
+  return table(results.reduce(function (acc, result) {
+    acc.push([
+      result.diff === 'patch'
+        ? color.yellowBright(result.package)
+        : color.red(result.package),
+      result.current,
+      result.backup
+    ])
+    return acc
+  }, [
+    ['Package', 'Current', 'Backup']
+      .map(function (h) { return color.underline(h) })
+  ]), {
+    align: ['l', 'r', 'r'],
+    stringLength: color.getStrippedLength
+  })
+}
+
+if (opts.help) {
+  console.log([
+    'npm-updated - view dependency version changes between npm installs',
+    '',
+    'Usage: npm-updated [options...]',
+    '',
+    ' -h, --help      Display this help message and exit',
+    '     --version   Display version number and exit'
+  ].join('\n'))
+  process.exit(0)
+} else if (opts.version) {
+  console.log(pkg.version)
+  process.exit(0)
+}
+
+app(opts)
+  .map(formatResults).fork(
+    function (err) {
+      color.red(console.error(err))
+      process.exit(1)
+    },
+    function (result) {
+      console.log(result)
+    }
+  )

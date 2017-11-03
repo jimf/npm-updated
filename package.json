@@ -1,0 +1,38 @@
+{
+  "name": "npm-updated",
+  "version": "0.1.0",
+  "description": "Identify dependency version differences between npm installs",
+  "main": "index.js",
+  "bin": "./bin/npm-updated",
+  "scripts": {
+    "lint": "standard .",
+    "test": "tape test/**/*.js",
+    "validate": "npm run lint && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jimf/npm-updated"
+  },
+  "keywords": [
+    "npm",
+    "dependency"
+  ],
+  "author": "Jim Fitzpatrick",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jimf/npm-updated/issues"
+  },
+  "homepage": "https://github.com/jimf/npm-updated",
+  "dependencies": {
+    "cli-color": "^1.2.0",
+    "daggy": "^1.2.0",
+    "data.task": "^3.1.1",
+    "minimist": "^1.2.0",
+    "semver": "^5.4.1",
+    "text-table": "^0.2.0"
+  },
+  "devDependencies": {
+    "standard": "^10.0.3",
+    "tape": "^4.8.0"
+  }
+}
